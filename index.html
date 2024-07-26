@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>脱獄ごっこPro|開放コード</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        #randomString {
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            background-color: #007aff;
+            color: white;
+            border: none;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h2>スキン、アイテム開放<br>コード作成</h2>
+        <label for="inputField">テキストを入力してください</label>
+        <input type="text" id="inputField" pattern="[ぁ-んァ-ン一-龯()0-9A-Za-z]+" title="無効な文字が含まれています。ひらがな、カタカナ、漢字、()、数字、英文字のみ使用できます。"> 
+        <br>
+        <br>
+        <button onclick="generateRandomString()">生成</button>
+        <div id="randomString"></div>
+    </div>
+
+    <script>
+        function hashCode(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return hash;
+        }
+
+        function generateRandomString() {
+            const input = document.getElementById('inputField').value.trim();
+            const randomStringElement = document.getElementById('randomString');
+            const allowedPattern = /^[ぁ-んァ-ン一-龯()0-9A-Za-z]+$/;
+
+            if (input === '') {
+                randomStringElement.innerText = 'テキストを入力してください';
+                return;
+            }
+
+            if (!allowedPattern.test(input)) {
+                randomStringElement.innerText = 'ひらがな、カタカナ、漢字、()、数字、英文字のみ使用できます';
+                return;
+            }
+
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            let hash = hashCode(input);
+            for (let i = 0; i < 6; i++) {
+                result += chars.charAt(Math.abs(hash) % chars.length);
+                hash = Math.floor(hash / chars.length);
+            }
+            randomStringElement.innerText = result;
+        }
+    </script>
+</body>
+</html>
